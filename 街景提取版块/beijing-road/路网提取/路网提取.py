@@ -31,11 +31,11 @@ warnings.filterwarnings('ignore')
 
 # 创建输出目录
 OUTPUT_DIR.mkdir(exist_ok=True)
-POINT_SAVE_DIR = OUTPUT_DIR / "road_points"
-BUFFER_SAVE_DIR = OUTPUT_DIR / "road_buffers"
-CENTERLINE_SAVE_DIR = OUTPUT_DIR / "centerlines"
-TOPOLOGY_SAVE_DIR = OUTPUT_DIR / "cleaned_topology"
-POLYGON_SAVE_DIR = OUTPUT_DIR / "polygonized_areas"
+POINT_SAVE_DIR = OUTPUT_DIR / "road_points_wgs84"
+BUFFER_SAVE_DIR = OUTPUT_DIR / "辅助验证数据" /  "road_buffers"
+CENTERLINE_SAVE_DIR = OUTPUT_DIR / "辅助验证数据" / "centerlines"
+TOPOLOGY_SAVE_DIR = OUTPUT_DIR / "辅助验证数据" / "cleaned_topology"
+POLYGON_SAVE_DIR = OUTPUT_DIR  / "辅助验证数据" / "polygonized_areas"
 
 for dir_path in [POINT_SAVE_DIR, BUFFER_SAVE_DIR, CENTERLINE_SAVE_DIR, TOPOLOGY_SAVE_DIR, POLYGON_SAVE_DIR]:
     dir_path.mkdir(exist_ok=True)
