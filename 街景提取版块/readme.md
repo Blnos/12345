@@ -26,16 +26,14 @@
 
 ```mermaid
 graph LR
-    A[OSM路网提取] -->|Step 0: 数据准备| B[原始 WGS84 坐标]
-    B -->|Step 1: 批量预处理<br/>调用百度Geoconv API| C[百度墨卡托坐标 (MC)]
-    C -->|Step 1 补充: 参数 from=1 to=6| C
-    C -->|Step 2: 街景索引<br/>调用qsdata接口| D[全景唯一 ID (PanoID)]
-    D -->|Step 3: 图像下载<br/>调用pr3d接口| E[最终街景图片]
-    
-    %% 补充说明节点（可选）
-    note1[(百度官方 Geoconv API)] -.-> B
-    note2[(qsdata 接口)] -.-> C
-    note3[(pr3d 接口)] -.-> D
+    A[OSM路网提取] -->|Step 0: 生成| B(原始 WGS84 坐标)
+    B -->|Step 1: 批量预处理| C(百度官方 Geoconv API)
+    C -->|参数: from=1 to=6| D[百度墨卡托坐标 MC]
+    D -->|Step 2: 街景索引| E(qsdata 接口)
+    E -->|解析 JSON| F[全景唯一 ID panoid]
+    F -->|Step 3: 图像下载| G(pr3d 接口)
+    G -->|保存| H[最终街景图片]
+
 ```
 
 ---
