@@ -27,10 +27,10 @@
       + [辅助验证数据](beijing-road/%E8%B7%AF%E7%BD%91%E6%8F%90%E5%8F%96/output_road_network/%E8%BE%85%E5%8A%A9%E9%AA%8C%E8%AF%81%E6%95%B0%E6%8D%AE) 道路中心线，缓冲区等过程数据
   
 + [街景提取](beijing-road/%E8%A1%97%E6%99%AF%E6%8F%90%E5%8F%96)文件夹：
-  + [街景提取_noAK.py](beijing-road/%E8%A1%97%E6%99%AF%E6%8F%90%E5%8F%96/%E8%A1%97%E6%99%AF%E6%8F%90%E5%8F%96_noAK.py) 无需AK的提取脚本
-  + [街景提取_test.py](beijing-road/%E8%A1%97%E6%99%AF%E6%8F%90%E5%8F%96/%E8%A1%97%E6%99%AF%E6%8F%90%E5%8F%96_test.py) 需要AK的提取脚本，由于限额问题暂不适用
+  + [街景提取_noAK.py](beijing-road/%E8%A1%97%E6%99%AF%E6%8F%90%E5%8F%96/%E8%A1%97%E6%99%AF%E6%8F%90%E5%8F%96_noAK.py) 无需AK的提取脚本,精度不高，暂不使用
+  + [街景提取_test.py](beijing-road/%E8%A1%97%E6%99%AF%E6%8F%90%E5%8F%96/%E8%A1%97%E6%99%AF%E6%8F%90%E5%8F%96_test.py) 需要AK的提取脚本，暂时用这个
   + [image_dir](beijing-road/%E8%A1%97%E6%99%AF%E6%8F%90%E5%8F%96/image_dir) 街景提取_noAK.py的工作结果
-    + xxx_街道images：每个街道的街景图像，命名规则为：路网点序号_街道名称_经度_纬度_俯仰角
+    + xxx_街道images：每个街道的街景图像，命名规则为：路网点序号_街道名称_经度_纬度_方位角_俯仰角
     + error_points：未能成功提取的街道路网点
       + 第 1 至 N 列	原始数据	也就是 point_xxx.csv 里原来的所有列（ID、经纬度等），完全原样保留。
       + 最后一列	error_info	这是程序自动添加的新列，记录具体的错误信息。
