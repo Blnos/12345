@@ -11,10 +11,10 @@ import glob
 # ==========================================
 # 输入路径：存放包含百度墨卡托坐标(mc_x, mc_y)的CSV文件夹
 # 这里的路径根据您提供的文件进行了保留
-INPUT_REL_PATH = r'../路网提取/output_road_network/road_points_mc'
+INPUT_REL_PATH = r'../路网提取/output_road_network/road_points_mc_all'
 
 # 输出路径：图片保存位置
-OUTPUT_ROOT_NAME = 'image_dir'
+OUTPUT_ROOT_NAME =r"E:\image_dir"
 
 
 # ==========================================
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     input_points_dir = os.path.join(current_dir, INPUT_REL_PATH)
     input_points_dir = os.path.normpath(input_points_dir)
 
-    base_output_dir = os.path.join(current_dir, OUTPUT_ROOT_NAME)
+    base_output_dir = OUTPUT_ROOT_NAME
     base_error_dir = os.path.join(base_output_dir, 'error_points')
 
     # 检查输入目录

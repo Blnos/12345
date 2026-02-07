@@ -1,0 +1,62 @@
+name: urban2vec-complaint
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  # Python版本
+  - python>=3.8
+
+  # 深度学习框架
+  - pytorch>=1.8.0
+  - torchvision>=0.9.0
+  # 可选：如需CUDA支持，取消注释以下行并注释上面的pytorch和torchvision
+  # - pytorch>=1.8.0 cudatoolkit=11.1
+  # - torchvision>=0.9.0 cudatoolkit=11.1
+
+  # 机器学习库
+  - scikit-learn>=0.24.0
+  - xgboost>=1.5.0
+
+  # 数据处理
+  - numpy>=1.19.0
+  - pandas>=1.1.0
+  - scipy>=1.5.0
+
+  # 图像处理
+  - pillow>=8.0.0
+  - scikit-image>=0.18.0
+
+  # 可视化
+  - matplotlib>=3.3.0
+  - seaborn>=0.11.0
+
+  # 地理计算
+  - geopy>=2.0.0
+
+  # 进度条
+  - tqdm>=4.50.0
+
+  # 配置文件和序列化
+  - pyyaml>=5.4.0
+  - joblib>=1.0.0
+
+  # 其他工具
+  - ipython>=7.20.0
+
+  # 包管理工具
+  - pip
+
+  # 通过pip安装的包（如果有conda不可用的包）
+  - pip:
+    # 通常所有包都可以通过conda安装，这里留空备用
+    # - 某些只能通过pip安装的包
+
+# 环境创建命令：
+# conda env create -f environment_v1.yaml
+# conda activate urban2vec-complaint
+
+# 注意：
+# 1. 如需CUDA支持，请根据系统CUDA版本调整cudatoolkit
+# 2. 某些包可能需要从特定渠道安装，此处已包含pytorch和conda-forge渠道
+# 3. 如果遇到依赖冲突，可以尝试先创建基础环境再安装额外包

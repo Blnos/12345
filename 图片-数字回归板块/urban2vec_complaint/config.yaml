@@ -1,0 +1,79 @@
+# Urban2Vec投诉预测项目配置文件
+
+# 数据路径配置
+paths:
+  # === 原始数据输入（不要修改，只读取）===
+  raw:
+    image_root: "./data/raw/images/"           # 街景图片根目录
+    complaints_csv: "./data/raw/complaints.csv" # 投诉数据
+  
+  # === 中间处理数据（Stage 1-2 产出）===
+  processed:
+    metadata_csv: "./data/processed/metadata.csv"
+    context_pickle: "./data/processed/context_knn.pickle"
+    train_pairs_pickle: "./data/processed/train_pair_knn.pickle"
+    val_pairs_pickle: "./data/processed/val_pair_knn.pickle"
+  
+  # === 模型文件（Stage 2 产出）===
+  models:
+    checkpoints_dir: "./models/checkpoints/"           # 街景训练检查点
+    best_checkpoint: "./models/checkpoints/street_view_best.tar"
+    predictors_dir: "./models/predictors/"             # Stage 4 预测模型保存
+  
+  # === 嵌入向量（核心产出，Stage 3）===
+  embeddings:
+    train: "./embeddings/train/community_embeddings.csv"    # 训练集社区嵌入
+    predict_dir: "./embeddings/predict/"                     # 新社区预测结果
+  
+  # === 最终结果（Stage 4 产出）===
+  results:
+    evaluation: "./results/evaluation/"              # 模型评估指标
+    visualizations: "./results/visualizations/"      # 可视化图表
+    predictions: "./results/predictions/"            # 预测结果CSV
+  
+  # === 日志 ===
+  logs: "./logs/"
+
+# Stage 1: 街景嵌入模型训练配置
+stage1_training:
+  embedding_dim: 50              # 嵌入维度（50或200）
+  batch_size: 32
+  num_epochs: 20
+  learning_rate: 0.0005
+  margin: 5.0                    # MarginRankingLoss边界值
+  num_workers: 4
+  save_every: 5                  # 每5轮保存检查点
+
+# Stage 2: 训练对构建配置
+pair_building:
+  k_neighbors: 6                 # K近邻数量
+  train_ratio: 0.8               # 训练集比例
+  min_samples: 50                # 最少样本数（少于则报错）
+
+# Stage 4: 投诉预测配置
+prediction:
+  cv_folds: 2                    # 改为2折（样本少时用），样本充足时用5
+  test_size: 0.2                 # 或者直接用训练/测试划分
+  models: ["Ridge", "SVR", "RandomForest", "XGBoost"]
+  
+  # 目标列（必须与complaints.csv中的列名一致）
+  target_columns:
+    - total_complaints
+    - house_management
+    - traffic_municipal
+    - public_service
+    - social_affairs
+    - market_economy
+    - urban_rural
+    - OTHER
+  
+  # 输出文件
+  evaluation_csv: "./results/evaluation/model_evaluation_results.csv"
+  plots_dir: "./results/visualizations/"
+
+# 通用配置
+general:
+  seed: 42
+  device: "auto"                 # auto/cpu/cuda
+  log_level: "INFO"
+  encoding: "utf-8"              # CSV编码，备选"gbk"

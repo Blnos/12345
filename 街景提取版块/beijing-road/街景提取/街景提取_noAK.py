@@ -317,7 +317,7 @@ if __name__ == "__main__":
                         f.write(img_data)
                     filenames_exist.add(save_name)
                     print(f"      已保存: {save_name}") # 如果嫌刷屏太多可以注释这行
-                    time.sleep(0.2)  # 稍微快一点
+                    time.sleep(0.15)  # 稍微快一点
 
             time.sleep(0.5)
 
