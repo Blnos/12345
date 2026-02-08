@@ -27,7 +27,7 @@
 
 ## 📂 数据格式要求
 
-### 1. 图片文件结构
+### 1. 图片文件结构（街景图未拼接前暂时方案）
 
 ```text
 街景图片/
@@ -40,7 +40,21 @@
 │   └── ...
 └── ...
 ```
+写了个[create_image_example](../create_image_example.py)，可以快速在原来那100多G的图片中随机抽出一部分作为data_example
 
+```bash
+# 自定义参数 
+# source：原图片文件目录
+# dest：输出图片文件目录
+# folder-count:抽几个文件夹 
+# image-count：每个文件夹选几张图片
+python create_image_example.py \
+--source "./data/raw/images_dir/"\
+--dest "./data/raw/images_example"\
+--folder-count 5 \
+--image-count 100 \
+--seed 123
+```
 
 
 **2. 投诉记录文件说明：**
@@ -82,12 +96,12 @@ pip install torch torchvision
 
 ```bash
 python 5_pipeline.py --mode train \
-  --image_root ./街景图片/ \
-  --label_path ./complaints.csv \
-  --output_dir ./output
+  --image_root "./data/raw/images/" \
+  --label_path "./data/raw/complaints.csv" \
+  --output_dir "./output"
 ```
 
-**方式 2：分步执行**
+**方式 2：分步执行（建议先按方法二分步执行，调整）**
 
 ```bash
 # Stage 0: 数据准备（生成元数据）
@@ -145,10 +159,54 @@ urban2vec_complaint/
 ├── config.yaml              # 配置文件
 ├── requirements.txt         # 依赖包列表
 ├── README.md                # 本文档
-└── src/                     # 核心模块
-    ├── models.py            # 模型定义
-    ├── datasets.py          # 数据集类
-    └── utils.py             # 工具函数
+├── src/                     # 核心模块
+│   ├── models.py            # 模型定义
+│   ├── datasets.py          # 数据集类
+│   └── utils.py             # 工具函数
+├──data/                           # 原始数据与中间数据
+│   ├── raw/                       # 原始输入
+│   │   ├── images/                # 街景图片（需自己准备）
+│   │   ├── complaints.csv         # 投诉数据（需自己准备）
+│   │   └── communities.csv        # 社区基础信息（训练过程中生成）
+│   └── processed/                 # 处理后数据（Stage 1-2 产出）
+│       ├── metadata.csv           # 图片元数据
+│       ├── context_knn.pickle     # K近邻上下文关系
+│       ├── train_pair_knn.pickle  # 训练对
+│       └── val_pair_knn.pickle    # 验证对
+│
+├── models/                        # 模型文件（Stage 2-3 产出）
+│   ├── checkpoints/               # 训练检查点
+│   │   ├── street_view_epoch5.tar
+│   │   ├── street_view_epoch10.tar
+│   │   └── street_view_best.tar   # 最佳模型（用于后续预测）
+│   └── predictors/                # Stage 4 预测模型
+│       ├── ridge_total.pkl
+│       ├── xgboost_house.pkl
+│       └── ...                    # 各类别预测模型
+│
+├── embeddings/                    # 嵌入向量（核心产出）
+│   ├── train/                     # 训练集社区嵌入
+│   │   └── community_embeddings.csv
+│   └── predict/                   # 新社区预测时生成
+│       ├── new_community_metadata.csv
+│       └── new_community_embeddings.csv
+│
+├── results/                       # 结果与评估（Stage 4 产出）
+│   ├── evaluation/                # 模型评估
+│   │   ├── model_evaluation_results.csv
+│   │   └── metrics_summary.json
+│   ├── visualizations/            # 可视化图表
+│   │   ├── correlation_heatmap.png
+│   │   ├── model_comparison.png
+│   │   └── *_detailed.png         # 各类别详细图
+│   └── predictions/               # 预测结果
+│       ├── community_predictions.csv    # 社区级预测
+│       └── detailed_predictions.csv     # 详细预测
+│
+└── logs/                          # 训练日志
+    ├── train_stage1.log
+    ├── train_stage2.log
+    └── predict.log
 ```
 
 ---
@@ -204,59 +262,6 @@ prediction:
    * 图片损坏/字段缺失自动跳过。
    * 详细的日志和进度显示。
 
----
-
-## 📂 输出文件说明
-
-训练流程目录结构：
-
-```text
-urban2vec_complaint/
-├── data/                          # 原始数据与中间数据
-│   ├── raw/                       # 原始输入
-│   │   ├── images/                # 街景图片
-│   │   ├── complaints.csv         # 投诉数据
-│   │   └── communities.csv        # 社区基础信息
-│   └── processed/                 # 处理后数据（Stage 1-2 产出）
-│       ├── metadata.csv           # 图片元数据
-│       ├── context_knn.pickle     # K近邻上下文关系
-│       ├── train_pair_knn.pickle  # 训练对
-│       └── val_pair_knn.pickle    # 验证对
-│
-├── models/                        # 模型文件（Stage 2-3 产出）
-│   ├── checkpoints/               # 训练检查点
-│   │   ├── street_view_epoch5.tar
-│   │   ├── street_view_epoch10.tar
-│   │   └── street_view_best.tar   # 最佳模型（用于后续预测）
-│   └── predictors/                # Stage 4 预测模型
-│       ├── ridge_total.pkl
-│       ├── xgboost_house.pkl
-│       └── ...                    # 各类别预测模型
-│
-├── embeddings/                    # 嵌入向量（核心产出）
-│   ├── train/                     # 训练集社区嵌入
-│   │   └── community_embeddings.csv
-│   └── predict/                   # 新社区预测时生成
-│       ├── new_community_metadata.csv
-│       └── new_community_embeddings.csv
-│
-├── results/                       # 结果与评估（Stage 4 产出）
-│   ├── evaluation/                # 模型评估
-│   │   ├── model_evaluation_results.csv
-│   │   └── metrics_summary.json
-│   ├── visualizations/            # 可视化图表
-│   │   ├── correlation_heatmap.png
-│   │   ├── model_comparison.png
-│   │   └── *_detailed.png         # 各类别详细图
-│   └── predictions/               # 预测结果
-│       ├── community_predictions.csv    # 社区级预测
-│       └── detailed_predictions.csv     # 详细预测
-│
-└── logs/                          # 训练日志
-    ├── train_stage1.log
-    ├── train_stage2.log
-    └── predict.log
-```
 
 ---
 
@@ -264,9 +269,8 @@ urban2vec_complaint/
 
 * **图片数量**：每个社区建议至少 10 张以上图片，以保证嵌入质量。
 * **内存需求**：Stage1 训练需要较大显存，如遇 OOM 可调整 `batch_size`。
-* **计算时间**：完整训练流程可能需要数小时（取决于数据量和 GPU）。
 * **数据质量**：确保图片文件名格式正确，经纬度信息准确。
-* **社区名称一致性**：图片文件夹名、文件名中的社区名、投诉数据中的社区名必须完全一致。
+* **⚠️社区名称一致性**：图片文件夹名、文件名中的社区名、投诉数据中的社区名必须完全一致。
 
 ---
 
