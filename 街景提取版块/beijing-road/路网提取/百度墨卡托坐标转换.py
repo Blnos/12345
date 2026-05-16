@@ -9,7 +9,7 @@ import math
 
 # ================= 配置区域 =================
 # 1. 填入您的百度 AK
-BAIDU_AK = "UmJFvBxkmtPryMVPcRvxlAN5ng2DXHCy"
+BAIDU_AK = ""
 
 # 2. 输入文件路径 (您之前的 CSV 文件夹)
 INPUT_DIR = r'output_road_network/road_points_wgs84'
